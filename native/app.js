@@ -1,5 +1,7 @@
 // 业务代码配置
 
+const querystring = require('querystring')
+
 const handleBlogRouter = require('./src/router/blog')
 const handleBlogRouter = require('./src/router/user')
 
@@ -7,6 +9,9 @@ const serverHandle = (req, res) => {
 	// 获取path
 	const url = req.url
 	req.path = url.split('?')[0]
+
+	// 解析 query
+	req.query = querystring.parse(url.split('?')[1])
 
 	// 设置返回格式
 	res.setHeader('Content-type', 'application.json')
