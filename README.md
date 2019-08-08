@@ -16,7 +16,15 @@
 
 nodemon 监测文件变化，重启node
 
-cross-env 设置环境变量，兼容mac、linux 和 windows
+#### cross-env
+
+运行跨平台设置和使用环境变量的脚本
+
+解决问题：**windows不支持NODE_ENV=development的设置方式**
+
+安装：`npm i cross-env --save-dev`
+
+使用：cross-env 设置环境变量，兼容mac、linux 和 windows
 
 ```json
 "scripts": {
