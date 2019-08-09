@@ -3,7 +3,7 @@
 const querystring = require('querystring')
 
 const handleBlogRouter = require('./src/router/blog')
-const handleBlogRouter = require('./src/router/user')
+const handleUserRouter = require('./src/router/user')
 
 const serverHandle = (req, res) => {
 	// 获取path

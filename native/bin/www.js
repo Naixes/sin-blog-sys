@@ -1,3 +1,5 @@
+// 开启，监听服务
+
 const http = require('http')
 
 const PORT = 8000

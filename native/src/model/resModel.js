@@ -1,6 +1,6 @@
 class BaseModel {
 	constructor(data, message) {
-		// 只传一个参数的情况
+		// 出错时，只传第二个参数的情况
 		if(typeof data === 'string') {
 			this.message = data
 			data = null
