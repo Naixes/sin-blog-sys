@@ -193,3 +193,10 @@ API：多端对接术语
 
 路由：API的一部分，后端内部定义
 
+#### 数据库
+
+`SET SQL_SAFE_UPDATES = 0` 取消安全模式
+
+软删除
+
+`select version()` 查看版本，大于 5 时 varchar 不区分汉字
