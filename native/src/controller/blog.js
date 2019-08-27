@@ -1,21 +1,11 @@
 // 数据处理
 
+const execSql = require('../db/mysql')
+
 // 获取博客列表
 const getBlogList = (id, search) => {
-    return [
-        {
-            id: '0',
-            title: 'title标题0',
-            content: 'content内容0',
-            publishtime: '1565314163430'
-        },
-        {
-            id: '1',
-            title: '标题1',
-            content: '内容1',
-            publishtime: '1565314163431'
-        }
-    ]
+		const result = execSql(`SELECT * FROM blogs`)
+    return 
 }
 
 // 获取博客详情
