@@ -16,11 +16,11 @@ const serverHandle = (req, res) => {
 	// 获取postData
 	function getPostData(req) {
 		return new Promise((res, rej) => {
-			if(req.method !== 'POST') {
+			if (req.method !== 'POST') {
 				res({})
 				return
 			}
-			if(req.headers['content-type'] !== 'application/json'){
+			if (req.headers['content-type'] !== 'application/json') {
 				res({})
 				return
 			}
@@ -29,7 +29,7 @@ const serverHandle = (req, res) => {
 				postData += chunck.toString()
 			})
 			req.on('end', () => {
-				if(!postData) {
+				if (!postData) {
 					res({})
 					return
 				}
@@ -43,24 +43,33 @@ const serverHandle = (req, res) => {
 
 	// 处理postData
 	getPostData(req).then(postData => {
-		if(postData) {
+		if (postData) {
 			req.body = postData
 		}
 
-		let blogData = handleBlogRouter(req, res)
-		let userData = handleUserRouter(req, res)
-	
-		if(blogData) {
-			res.end(JSON.stringify(blogData))
+		// bolg
+		// let blogData = handleBlogRouter(req, res)
+		// if (blogData) {
+		// 	res.end(JSON.stringify(blogData))
+		// 	return
+		// }
+		let PblogData = handleBlogRouter(req, res)
+		if (PblogData) {
+			PblogData.then(blogData => {
+				res.end(JSON.stringify(blogData))
+			})
 			return
 		}
-		if(userData) {
+
+		// user
+		let userData = handleUserRouter(req, res)
+		if (userData) {
 			res.end(JSON.stringify(userData))
 			return
 		}
-	
+
 		// 找不到页面
-		res.writeHead(404, {'Content-type': 'text/plain'})
+		res.writeHead(404, { 'Content-type': 'text/plain' })
 		res.end('404 Not Found')
 	})
 }

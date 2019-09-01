@@ -1,51 +1,63 @@
-const {SuccessModel, ErrorModel} = require('../model/resModel')
-const {getBlogList, getBlogDetail, addBlog,updateBlog, delBlog} = require('../controller/blog')
+const { SuccessModel, ErrorModel } = require('../model/resModel')
+const { getBlogList, getBlogDetail, addBlog, updateBlog, delBlog } = require('../controller/blog')
 
 const handleBlogRouter = (req, res) => {
 	const method = req.method
 	const path = req.path
-	let {id} = req.query
+	let { id } = req.query
 
 	//  获取博客列表
-	if(method === 'GET' && path ==='/api/blog/list') {
-		let {author, search} = req.query
-		let data = getBlogList(author, search)
-		return new SuccessModel(data)
+	if (method === 'GET' && path === '/api/blog/list') {
+		let { author, search } = req.query
+		// let data = getBlogList(author, search)
+		// return new SuccessModel(data)
+		// P开头表示promise
+		let Pdata = getBlogList(author, search)
+		return Pdata.then(data => {
+			return new SuccessModel(data)
+		})
 	}
 
 	//  获取博客详情
-	if(method === 'GET' && path ==='/api/blog/detail') {
-		let data = getBlogDetail(id)
-		return new SuccessModel(data)
+	if (method === 'GET' && path === '/api/blog/detail') {
+		let Pdata = getBlogDetail(id)
+		return Pdata.then(data => {
+			return new SuccessModel(data[0])
+		})
 	}
 
 	//  上传博客
-	if(method === 'POST' && path ==='/api/blog/add') {
-		let blogData = req.body
-		let data = addBlog(blogData)
-		return new SuccessModel(data)
+	if (method === 'POST' && path === '/api/blog/add') {
+		req.body.author = 'zhangsan'
+		console.log(req.body)
+		let Pdata = addBlog(req.body)
+		return Pdata.then(data => {
+			return new SuccessModel(data)
+		})
 	}
 
 	//  更新博客
-	if(method === 'POST' && path ==='/api/blog/update') {
+	if (method === 'POST' && path === '/api/blog/update') {
 		let blogData = req.body
-		let result = updateBlog(id, blogData)
-		if(result) {
-			return new SuccessModel()
-		}else {
-			return new ErrorModel('更新博客失败')
-		}
+		let Presult = updateBlog(id, blogData)
+		Presult.then(result => {
+			if (result) {
+				return new SuccessModel()
+			} else {
+				return new ErrorModel('更新博客失败')
+			}
+		})
 	}
 
 	//  删除博客
-	if(method === 'POST' && path ==='/api/blog/del') {
+	if (method === 'POST' && path === '/api/blog/del') {
 		let result = delBlog(id)
-		if(result) {
+		if (result) {
 			return new SuccessModel()
-		}else {
+		} else {
 			return new ErrorModel('删除博客失败')
 		}
 	}
- }
+}
 
- module.exports = handleBlogRouter
+module.exports = handleBlogRouter

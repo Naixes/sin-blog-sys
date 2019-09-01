@@ -200,3 +200,5 @@ API：多端对接术语
 软删除
 
 `select version()` 查看版本，大于 5 时 varchar 不区分汉字
+
+API对接

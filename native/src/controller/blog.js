@@ -1,48 +1,65 @@
 // 数据处理
 
-const execSql = require('../db/mysql')
+const { execSql } = require('../db/mysql')
 
 // 获取博客列表
-const getBlogList = (id, search) => {
-		const result = execSql(`SELECT * FROM blogs`)
-    return 
+const getBlogList = (author, search) => {
+	let sql = `SELECT * FROM blogs WHERE 1=1 `
+	// author && sql += `and author=${author} `
+	// search && sql += `and title like %${search}% `
+	if (author) {
+		sql += `and author=${author} `
+	}
+	if (search) {
+		sql += `and title like %${search}% `
+	}
+	sql += `order by createtime desc`
+	// 返回Promise
+	return execSql(sql)
 }
 
 // 获取博客详情
 const getBlogDetail = (id) => {
-    return [
-        {
-            id: '0',
-            title: 'title标题0',
-            content: 'content内容0',
-            publishtime: '1565314163430'
-        }
-    ]
+	let sql = `SELECT * FROM blogs WHERE id=${id}`
+	// 返回Promise
+	return execSql(sql)
 }
 
 // 上传博客
 const addBlog = (data = {}) => {
-    return [
-        {
-            id: '3'
-        }
-    ]
+	let { title, content, author } = data
+	let createtime = Date.now()
+	let sql = `INSERT INTO blogs (title, content, createtime, author) VALUES ('${title}', '${content}', ${createtime}, '${author}')`
+	console.log(sql)
+	return execSql(sql).then(insertData => {
+		console.log(insertData)
+		return {
+			id: insertData.insertId
+		}
+	})
 }
 
 // 更新博客
 const updateBlog = (id, data = {}) => {
-    return true
+	let { title, content } = data
+	let sql = `UPDATE blogs SET title='${title}, content='${content} WHERE id=${id}`
+	return execSql(sql).then(updateData => {
+		if (updateData.affectedRows > 0) {
+			return true
+		}
+		return false
+	})
 }
 
 // 删除博客
 const delBlog = (id) => {
-    return true
+	return true
 }
 
 module.exports = {
-		getBlogList,
-		getBlogDetail,
-		addBlog,
-		updateBlog,
-		delBlog
+	getBlogList,
+	getBlogDetail,
+	addBlog,
+	updateBlog,
+	delBlog
 }
