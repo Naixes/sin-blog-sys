@@ -51,12 +51,14 @@ const handleBlogRouter = (req, res) => {
 
 	//  删除博客
 	if (method === 'POST' && path === '/api/blog/del') {
-		let result = delBlog(id)
-		if (result) {
-			return new SuccessModel()
-		} else {
-			return new ErrorModel('删除博客失败')
-		}
+		let Presult = delBlog(id)
+		Presult.then(result => {
+			if (result) {
+				return new SuccessModel()
+			} else {
+				return new ErrorModel('删除博客失败')
+			}
+		})
 	}
 }
 

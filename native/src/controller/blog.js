@@ -53,7 +53,13 @@ const updateBlog = (id, data = {}) => {
 
 // 删除博客
 const delBlog = (id) => {
-	return true
+	let sql = `DELETE FROM blogs WHERE id=${id}`
+	return execSql(sql).then(delData => {
+		if (delData.affectedRows > 0) {
+			return true
+		}
+		return false
+	})
 }
 
 module.exports = {
