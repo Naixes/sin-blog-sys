@@ -62,9 +62,11 @@ const serverHandle = (req, res) => {
 		}
 
 		// user
-		let userData = handleUserRouter(req, res)
-		if (userData) {
-			res.end(JSON.stringify(userData))
+		let PuserData = handleUserRouter(req, res)
+		if (PuserData) {
+			PuserData.then(userData => {
+				res.end(JSON.stringify(userData))
+			})
 			return
 		}
 

@@ -1,20 +1,21 @@
-const {SuccessModel, ErrorModel} = require('../model/resModel')
-const {checkLogin} = require('../controller/user')
+const { SuccessModel, ErrorModel } = require('../model/resModel')
+const { checkLogin } = require('../controller/user')
 
 const handleUserRouter = (req, res) => {
 	const method = req.method
-	const url = req.url
-	const path = url.split('?')[0]
+	const path = req.path
 
 	//  登录
-	if(method === 'GET' && path ==='/api/user/login') {
-		const {username, password} = req.body
-		let result = checkLogin(username, password)
-		if(result) {
-			return new SuccessModel()
-		}else {
+	if (method === 'POST' && path === '/api/user/login') {
+		const { username, password } = req.body
+		console.log(req.body)
+		let Presult = checkLogin(username, password)
+		return Presult.then(data => {
+			if (data.username) {
+				return new SuccessModel()
+			}
 			return new ErrorModel('登录失败')
-		}
+		})
 	}
 }
 

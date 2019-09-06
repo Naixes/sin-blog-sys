@@ -1,3 +1,4 @@
+// 路由处理
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const { getBlogList, getBlogDetail, addBlog, updateBlog, delBlog } = require('../controller/blog')
 
