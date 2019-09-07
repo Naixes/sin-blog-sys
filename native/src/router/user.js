@@ -30,9 +30,14 @@ const handleUserRouter = (req, res) => {
 		return Presult.then(data => {
 			if (data.username) {
 
-				// 操作cookie
+				// 设置cookie
 				// 限制前端修改：httpOnly
-				res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly; expires=${getExpires()}`)
+				// res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly; expires=${getExpires()}`)
+
+				// 设置session
+				req.session.username = data.username
+				req.session.realname = data.realname
+
 				return new SuccessModel()
 			}
 			return new ErrorModel('登录失败')
@@ -41,9 +46,12 @@ const handleUserRouter = (req, res) => {
 
 	// 登录校验测试
 	if (method === 'GET' && path === '/api/user/login-test') {
-		if (req.cookie.username) {
+		// if (req.cookie.username) {
+		if (req.session.username) {
 			// 需要返回Promise
-			return Promise.resolve(new SuccessModel)
+			return Promise.resolve(new SuccessModel({
+				session: req.session
+			}))
 		}
 		return Promise.resolve(new ErrorModel('测试登陆失败'))
 	}
