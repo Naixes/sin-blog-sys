@@ -13,6 +13,18 @@ const serverHandle = (req, res) => {
 	// 解析 query
 	req.query = querystring.parse(url.split('?')[1])
 
+	// 解析cookie
+	req.cookie = {}
+	const cookieStr = req.headers.cookie || '' // k1=v1;k2=v2
+	cookieStr.split(';').forEach(item => {
+		if (!item) return
+
+		let arr = item.split('=')
+		let key = arr[0]
+		let value = arr[1]
+		req.cookie[key] = value
+	});
+
 	// 获取postData
 	function getPostData(req) {
 		return new Promise((res, rej) => {

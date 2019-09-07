@@ -202,3 +202,95 @@ API：多端对接术语
 `select version()` 查看版本，大于 5 时 varchar 不区分汉字
 
 API对接
+
+#### 登录
+
+##### 登录校验
+
+###### cookie
+
+5kb，跨域不共享，字符串（k1=v1;k2=v2），每次请求都会发送，服务端可操作，浏览器也可以js修改（有限制）
+
+**客户端js操作cookie**
+
+查看cookie：
+
+1. `requestHeaders：cookie`（将当前域的cookie发送给服务端）；`responseHeaders：Set-Cookie`（服务端修改后返回）
+2. `Application`中
+3. `document.cookie`查看（有限制）
+
+修改cookie：
+
+`document.cookie = 'k1=v1' // 会追加到后面`
+
+**服务端node操作cookie**
+
+查看解析：
+
+```js
+// 解析cookie
+req.cookie = {}
+const cookieStr = req.headers.cookie || '' // k1=v1;k2=v2
+cookieStr.split(';').forEach(item => {
+    if (!item) return
+
+    let arr = item.split('=')
+    let key = arr[0]
+    let value = arr[1]
+    req.cookie[key] = value
+});
+```
+
+修改：
+
+```js
+// 操作cookie
+res.setHeader('Set-Cookie', `username=${data.username}; path=/`)
+```
+
+登录验证：
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
