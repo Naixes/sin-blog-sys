@@ -235,8 +235,9 @@ cookieStr.split(';').forEach(item => {
     if (!item) return
 
     let arr = item.split('=')
-    let key = arr[0]
-    let value = arr[1]
+    // cookie拼接时会添加空格
+    let key = arr[0].trim()
+    let value = arr[1].trim()
     req.cookie[key] = value
 });
 ```
@@ -244,11 +245,37 @@ cookieStr.split(';').forEach(item => {
 修改：
 
 ```js
+// 生成cookie过期时间
+const getExpires = function () {
+	let expires = new Date()
+	expires.setTime(expires.getTime() + (24 * 60 * 60 * 1000))
+	// 转换成expires格式的时间
+	return expires.toGMTString()
+}
+
 // 操作cookie
-res.setHeader('Set-Cookie', `username=${data.username}; path=/`)
+// 限制前端修改：httpOnly
+res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly; expires=${getExpires()}`)
 ```
 
 登录验证：
+
+```js
+// 登录校验测试
+if (method === 'GET' && path === '/api/user/login-test') {
+    if (req.cookie.username) {
+        // 需要返回Promise
+        return Promise.resolve(new SuccessModel)
+    }
+    return Promise.resolve(new ErrorModel('测试登陆失败'))
+}
+```
+
+###### session
+
+cookie缺点暴露个人信息
+
+解决：cookie存储用户id，session（服务端）中存储用户信息
 
 
 

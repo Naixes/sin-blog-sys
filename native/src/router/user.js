@@ -1,6 +1,14 @@
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const { login } = require('../controller/user')
 
+// 生成cookie过期时间
+const getExpires = function () {
+	let expires = new Date()
+	expires.setTime(expires.getTime() + (24 * 60 * 60 * 1000))
+	// 转换成expires格式的时间
+	return expires.toGMTString()
+}
+
 const handleUserRouter = (req, res) => {
 	const method = req.method
 	const path = req.path
@@ -23,7 +31,8 @@ const handleUserRouter = (req, res) => {
 			if (data.username) {
 
 				// 操作cookie
-				res.setHeader('Set-Cookie', `username=${data.username}; path=/`)
+				// 限制前端修改：httpOnly
+				res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly; expires=${getExpires()}`)
 				return new SuccessModel()
 			}
 			return new ErrorModel('登录失败')
