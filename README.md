@@ -277,11 +277,65 @@ cookie缺点暴露个人信息
 
 解决：cookie存储用户id，session（服务端）中存储用户信息
 
+##### redis
 
+将session放在变量中：内存有限；多进程，进程之间内存无法共享
 
+redis：web server最常用的缓存数据库，数据存放在内存中，速度快，内存小 
 
+为什么不用mysql：session访问频繁，对性能要求高，数据量小，不考虑断电丢失问题（重新登录），也可以不丢失需要配置
 
+###### 安装
 
+https://github.com/ServiceStack/redis-windows
+
+启动
+
+```js
+// 服务器
+redis-server.exe redis.windows.conf
+// 客户端
+redis-cli
+```
+
+配置
+
+```js
+redis-cli -h xxx -p xxxx
+config get xxx
+```
+
+###### 基本使用
+
+```js
+set name xxx
+get name
+del name
+```
+
+###### noed使用
+
+安装redis
+
+```js
+const redis = require('redis')
+
+const client = redis.createClient(6379, '127.0.0.1')
+
+client.on('err', (err) => {
+	console.log(err)
+})
+
+client.set('name', 'sin', redis.print)
+client.set('name', 'sin', (err, res) => {
+	console.log(res)
+})
+client.get('name', (err, res) => {
+	console.log(res)
+    client.quit()
+})
+
+```
 
 
 

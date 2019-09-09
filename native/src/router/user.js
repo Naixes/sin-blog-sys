@@ -33,7 +33,6 @@ const handleUserRouter = (req, res) => {
 				// 设置cookie
 				// 限制前端修改：httpOnly
 				// res.setHeader('Set-Cookie', `username=${data.username}; path=/; httpOnly; expires=${getExpires()}`)
-
 				// 设置session
 				req.session.username = data.username
 				req.session.realname = data.realname
