@@ -384,13 +384,28 @@ module.exports = {
 }
 ```
 
+##### 联调
 
+- 登陆依赖cookie
+- cookie跨域不共享，nignx代理让前后端同域
 
+http-server开启前端服务
 
+###### nginx
 
+- 高性能web服务器，开源免费
+- 一般用于静态服务，负载均衡（将流量分配到不同的机器）
+- 反向代理（客户端不可见，反之是正向代理）
 
+浏览器----nginx----/----html(8001)
 
+​						  ----/api/----node(8000)
 
+下载：官网
+
+配置：c:\nginx\conf\nginx.conf(windows)
+
+命令：检测格式 nginx -t；启动 nginx；重启 nginx -s reload；停止：nginx -s stop 
 
 
 
