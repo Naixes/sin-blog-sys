@@ -6,7 +6,7 @@ const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 
 // 全局的session数据
-const SESSION_DATA = {}
+// const SESSION_DATA = {}
 
 // 生成cookie过期时间
 const getExpires = function () {
@@ -62,19 +62,26 @@ const serverHandle = (req, res) => {
 	// 解析session
 	let needSetCookie = false
 	let userId = req.cookie.userid
+	// if (userId) {
+	// 	// 有userId没有session信息：初始化session
+	// 	if (!SESSION_DATA[userId]) {
+	// 		SESSION_DATA[userId] = {}
+	// 	}
+	// } else {
+	// 	// 没有userId：设置userId，初始化session
+	// 	needSetCookie = true
+	// 	// 生成userId
+	// 	userId = `${Date.now()}_${Math.random()}`
+	// 	SESSION_DATA[userId] = {}
+	// }
+	// req.session = SESSION_DATA[userId]
 	if (userId) {
-		// 有userId没有session信息：初始化session
-		if (!SESSION_DATA[userId]) {
-			SESSION_DATA[userId] = {}
-		}
+		req.sessionId = userId
 	} else {
-		// 没有userId：设置userId，初始化session
 		needSetCookie = true
 		// 生成userId
 		userId = `${Date.now()}_${Math.random()}`
-		SESSION_DATA[userId] = {}
 	}
-	req.session = SESSION_DATA[userId]
 
 	// 解析 query
 	req.query = querystring.parse(url.split('?')[1])

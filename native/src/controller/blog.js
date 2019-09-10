@@ -52,8 +52,8 @@ const updateBlog = (id, data = {}) => {
 }
 
 // 删除博客
-const delBlog = (id) => {
-	let sql = `DELETE FROM blogs WHERE id=${id}`
+const delBlog = (id, username) => {
+	let sql = `DELETE FROM blogs WHERE id=${id} AND username=${username}`
 	return execSql(sql).then(delData => {
 		if (delData.affectedRows > 0) {
 			return true

@@ -12,8 +12,8 @@ if (env === 'production') {
 		database: 'sin-blog'
 	}
 	REDIS_CONF = {
-		host: '127.0.0.1',
-		port: 'admin'
+		host: 'localhost',
+		port: 6379
 	}
 }
 
@@ -26,8 +26,8 @@ if (env === 'dev') {
 		database: 'sin-blog'
 	}
 	REDIS_CONF = {
-		host: '127.0.0.1',
-		port: 'admin'
+		host: 'localhost',
+		port: 6379
 	}
 }
 

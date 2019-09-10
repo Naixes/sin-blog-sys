@@ -2,6 +2,13 @@
 const { SuccessModel, ErrorModel } = require('../model/resModel')
 const { getBlogList, getBlogDetail, addBlog, updateBlog, delBlog } = require('../controller/blog')
 
+// 登录验证
+const checkLogin = function (req) {
+	if (!req.session.username) {
+		return Promise.resolve(new ErrorModel('尚未登录'))
+	}
+}
+
 const handleBlogRouter = (req, res) => {
 	const method = req.method
 	const path = req.path
@@ -29,8 +36,15 @@ const handleBlogRouter = (req, res) => {
 
 	//  上传博客
 	if (method === 'POST' && path === '/api/blog/add') {
-		req.body.author = 'zhangsan'
-		console.log(req.body)
+		// 登录校验
+		const checkLoginResult = checkLogin(req)
+		if (checkLoginResult) {
+			// 未登录
+			return checkLoginResult
+		}
+
+		// req.body.author = 'zhangsan'
+		req.body.author = req.session.username
 		let Pdata = addBlog(req.body)
 		return Pdata.then(data => {
 			return new SuccessModel(data)
@@ -39,6 +53,12 @@ const handleBlogRouter = (req, res) => {
 
 	//  更新博客
 	if (method === 'POST' && path === '/api/blog/update') {
+		// 登录校验
+		const checkLoginResult = checkLogin(req)
+		if (checkLoginResult) {
+			return checkLoginResult
+		}
+
 		let blogData = req.body
 		let Presult = updateBlog(id, blogData)
 		Presult.then(result => {
@@ -52,7 +72,14 @@ const handleBlogRouter = (req, res) => {
 
 	//  删除博客
 	if (method === 'POST' && path === '/api/blog/del') {
-		let Presult = delBlog(id)
+		// 登录校验
+		const checkLoginResult = checkLogin(req)
+		if (checkLoginResult) {
+			return checkLoginResult
+		}
+
+		let username = req.session.username
+		let Presult = delBlog(id, username)
 		Presult.then(result => {
 			if (result) {
 				return new SuccessModel()
