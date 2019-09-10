@@ -7,6 +7,7 @@ const handleUserRouter = require('./src/router/user')
 
 // 全局的session数据
 // const SESSION_DATA = {}
+const { get, set } = require('./src/db/redis')
 
 // 生成cookie过期时间
 const getExpires = function () {
@@ -61,7 +62,7 @@ const serverHandle = (req, res) => {
 
 	// 解析session
 	let needSetCookie = false
-	let userId = req.cookie.userid
+	// let userId = req.cookie.userid
 	// if (userId) {
 	// 	// 有userId没有session信息：初始化session
 	// 	if (!SESSION_DATA[userId]) {
@@ -75,8 +76,13 @@ const serverHandle = (req, res) => {
 	// 	SESSION_DATA[userId] = {}
 	// }
 	// req.session = SESSION_DATA[userId]
+	let userId = req.cookie.userid
 	if (userId) {
 		req.sessionId = userId
+		// 同步到redis
+		get(userId).then(info => {
+			set(req.sessionId, info)
+		})
 	} else {
 		needSetCookie = true
 		// 生成userId
