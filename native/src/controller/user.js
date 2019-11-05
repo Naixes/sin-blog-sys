@@ -6,6 +6,7 @@ const { execSql } = require('../db/mysql')
 const login = (username, password) => {
 	// 字符串注意加上引号
 	const sql = `SELECT username, realname FROM user WHERE username='${username}' and password='${password}'`
+	console.log(sql)
 	return execSql(sql).then(rows => {
 		return rows[0] || {}
 	})
